@@ -25,9 +25,9 @@ namespace CallPlan
         public string Name { get; private set; }
         public IEnumerable<Agent> Agents { get { return _agents; } }
 
-        public void Assign(IInteraction interaction)
+        public Agent Assign(IInteraction interaction)
         {
-            _loadBalancer.AssignInteraction(interaction, _queues[interaction.GetType()]);
+            return _loadBalancer.AssignInteraction(interaction, _queues[interaction.GetType()]);
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CallPlanTests
 {
-    class LoadBalancerTests
+    public class LoadBalancerTests
     {
     }
 }

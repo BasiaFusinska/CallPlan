@@ -6,34 +6,48 @@ namespace CallPlan
 {
     public class LoadBalancer : ILoadBalancer
     {
-        public void AssignInteraction(IInteraction interaction, Queue<Agent> agents)
+        public Agent AssignInteraction(IInteraction interaction, Queue<Agent> agents)
         {
             var email = interaction as EmailInteraction;
             if (email != null)
             {
-                AssignEmail(email, agents);
-                return;
+                return AssignEmail(email, agents);
             }
 
             var call = interaction as CallInteraction;
             if (call != null)
             {
-                AssignCall(call, agents);
+                return AssignCall(call, agents);
             }
+            return null;
         }
 
-        private void AssignCall(CallInteraction call, IEnumerable<Agent> agents)
+        private static Agent AssignCall(CallInteraction call, Queue<Agent> agents)
         {
-            var agent = agents.First();
+            var agent = agents.Peek();
             if (agent.Calls.Any())
                 throw new Exception();
 
             agent.Calls.Add(call);
-            //move to end
+
+            agent = agents.Dequeue();
+            agents.Enqueue(agent);
+
+            return agent;
         }
 
-        private void AssignEmail(EmailInteraction email, IEnumerable<Agent> agents)
+        private static Agent AssignEmail(EmailInteraction email, Queue<Agent> agents)
         {
+            var agent = agents.Peek();
+            if (agent.Emails.Count >= 5)
+                throw new Exception();
+
+            agent.Emails.Add(email);
+
+            agent = agents.Dequeue();
+            agents.Enqueue(agent);
+
+            return agent;
         }
     }
 }

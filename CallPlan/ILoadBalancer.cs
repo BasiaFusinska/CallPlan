@@ -8,7 +8,7 @@ namespace CallPlan
 {
     public interface ILoadBalancer
     {
-        void AssignInteraction(IInteraction interaction, Queue<Agent> agents);
+        Agent AssignInteraction(IInteraction interaction, Queue<Agent> agents);
     }
 
 }
