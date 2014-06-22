@@ -33,13 +33,8 @@ namespace CallPlan
                 {
                     interaction => _serviceHandler.HandleService(((IInteraction) interaction).Originator).Result,
                     response => _groupAssigner.AssignGroup((ServiceResponse)response, _groups),
-                    group =>
-                        {
-                            ((AgentsGroup) group).Assign((IInteraction) inputData);
-                            return null;
-                        }
-                }
-                );
+                    group => ((AgentsGroup) @group).Assign((IInteraction) inputData)
+                });
         }
     }
 }

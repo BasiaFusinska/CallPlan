@@ -13,9 +13,9 @@ namespace CallPlanTests
         {
             var groups = new List<AgentsGroup>
             {
-                new AgentsGroup(null, "A", null),
-                new AgentsGroup(null, "B", null),
-                new AgentsGroup(null, "C", null),
+                new AgentsGroup(null, "A", new Agent[] {}),
+                new AgentsGroup(null, "B", new Agent[] {}),
+                new AgentsGroup(null, "C", new Agent[] {}),
             };
 
             var groupAssigner = new GroupAssigner();
@@ -39,9 +39,9 @@ namespace CallPlanTests
         {
             var groups = new List<AgentsGroup>
             {
-                new AgentsGroup(null, "A", null),
-                new AgentsGroup(null, "C", null),
-                new AgentsGroup(null, "D", null),
+                new AgentsGroup(null, "A", new Agent[] {}),
+                new AgentsGroup(null, "C", new Agent[] {}),
+                new AgentsGroup(null, "D", new Agent[] {}),
             };
 
             var groupAssigner = new GroupAssigner();
