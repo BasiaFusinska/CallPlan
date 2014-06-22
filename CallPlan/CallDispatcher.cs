@@ -19,13 +19,6 @@ namespace CallPlan
             _groups = groups;
         }
 
-        //public async void Dispatch(IInteraction interaction)
-        //{
-        //    var response = await _serviceHandler.HandleService(interaction.Originator);
-        //    var matchingGroup = _groupAssigner.AssignGroup(response, _groups);
-        //    matchingGroup.Assign(interaction);
-        //}
-
         public CallPlan CreateCallPlan(dynamic inputData)
         {
             return new CallPlan(
@@ -33,7 +26,7 @@ namespace CallPlan
                 {
                     interaction => _serviceHandler.HandleService(((IInteraction) interaction).Originator).Result,
                     response => _groupAssigner.AssignGroup((ServiceResponse)response, _groups),
-                    group => ((AgentsGroup) @group).Assign((IInteraction) inputData)
+                    agentsGroup => ((AgentsGroup) agentsGroup).Assign((IInteraction) inputData)
                 });
         }
     }

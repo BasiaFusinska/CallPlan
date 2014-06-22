@@ -26,7 +26,7 @@ namespace CallPlan
         {
             var agent = agents.Peek();
             if (agent.Calls.Any())
-                throw new Exception();
+                throw new InteractionsOverflowException();
 
             agent.Calls.Add(call);
 
@@ -40,7 +40,7 @@ namespace CallPlan
         {
             var agent = agents.Peek();
             if (agent.Emails.Count >= 5)
-                throw new Exception();
+                throw new InteractionsOverflowException();
 
             agent.Emails.Add(email);
 

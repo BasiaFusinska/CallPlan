@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using CallPlan;
 using FluentAssertions;
@@ -58,7 +57,7 @@ namespace CallPlanTests
         }
 
         [Test]
-        [ExpectedException(typeof(Exception))]
+        [ExpectedException(typeof(InteractionsOverflowException))]
         public void overloaded_calls_should_throw_exception()
         {
             var agent1 = new Agent("A1");
@@ -73,7 +72,7 @@ namespace CallPlanTests
         }
 
         [Test]
-        [ExpectedException(typeof(Exception))]
+        [ExpectedException(typeof(InteractionsOverflowException))]
         public void overloaded_emails_should_throw_exception()
         {
             var agent1 = new Agent("A1");

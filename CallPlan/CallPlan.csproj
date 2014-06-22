@@ -48,6 +48,7 @@
     <Compile Include="IGroupAssigner.cs" />
     <Compile Include="IInteraction.cs" />
     <Compile Include="ILoadBalancer.cs" />
+    <Compile Include="InteractionsOverflowException.cs" />
     <Compile Include="IServiceHandler.cs" />
     <Compile Include="LoadBalancer.cs" />
     <Compile Include="EmailInteraction.cs" />
