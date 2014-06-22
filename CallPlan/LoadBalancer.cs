@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +7,7 @@ namespace CallPlan
 {
     public class LoadBalancer : ILoadBalancer
     {
-        public Agent AssignInteraction(IInteraction interaction, Queue<Agent> agents)
+        public Agent AssignInteraction(IInteraction interaction, ConcurrentQueue<Agent> agents)
         {
             var email = interaction as EmailInteraction;
             if (email != null)
@@ -22,29 +23,33 @@ namespace CallPlan
             return null;
         }
 
-        private static Agent AssignCall(CallInteraction call, Queue<Agent> agents)
+        private static Agent AssignCall(CallInteraction call, ConcurrentQueue<Agent> agents)
         {
-            var agent = agents.Peek();
+            Agent agent;
+            while(!agents.TryPeek(out agent)) {}
+
             if (agent.Calls.Any())
                 throw new InteractionsOverflowException();
 
             agent.Calls.Add(call);
 
-            agent = agents.Dequeue();
+            while(!agents.TryDequeue(out agent)) {}
             agents.Enqueue(agent);
 
             return agent;
         }
 
-        private static Agent AssignEmail(EmailInteraction email, Queue<Agent> agents)
+        private static Agent AssignEmail(EmailInteraction email, ConcurrentQueue<Agent> agents)
         {
-            var agent = agents.Peek();
+            Agent agent;
+            while (!agents.TryPeek(out agent)) { }
+
             if (agent.Emails.Count >= 5)
                 throw new InteractionsOverflowException();
 
             agent.Emails.Add(email);
 
-            agent = agents.Dequeue();
+            while (!agents.TryDequeue(out agent)) { }
             agents.Enqueue(agent);
 
             return agent;

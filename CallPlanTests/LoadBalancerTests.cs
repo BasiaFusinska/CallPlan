@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Linq;
 using CallPlan;
 using FluentAssertions;
@@ -18,7 +18,7 @@ namespace CallPlanTests
             var call = new CallInteraction("12345");
             var email = new EmailInteraction("email@email.com");
 
-            var agents = new Queue<Agent>(new [] {agent1, agent2});
+            var agents = new ConcurrentQueue<Agent>(new [] {agent1, agent2});
             var loadBalancer = new LoadBalancer();
 
             var callAgent = loadBalancer.AssignInteraction(call, agents);
@@ -39,7 +39,7 @@ namespace CallPlanTests
             var agent1 = new Agent("A1");
             var agent2 = new Agent("A2");
 
-            var agents = new Queue<Agent>(new[] { agent1, agent2 });
+            var agents = new ConcurrentQueue<Agent>(new[] { agent1, agent2 });
             var loadBalancer = new LoadBalancer();
 
             loadBalancer.AssignInteraction(new EmailInteraction("email1@email.com"), agents);
@@ -63,7 +63,7 @@ namespace CallPlanTests
             var agent1 = new Agent("A1");
             var agent2 = new Agent("A2");
 
-            var agents = new Queue<Agent>(new[] { agent1, agent2 });
+            var agents = new ConcurrentQueue<Agent>(new[] { agent1, agent2 });
             var loadBalancer = new LoadBalancer();
 
             loadBalancer.AssignInteraction(new CallInteraction("12345"), agents);
@@ -78,7 +78,7 @@ namespace CallPlanTests
             var agent1 = new Agent("A1");
             var agent2 = new Agent("A2");
 
-            var agents = new Queue<Agent>(new[] { agent1, agent2 });
+            var agents = new ConcurrentQueue<Agent>(new[] { agent1, agent2 });
             var loadBalancer = new LoadBalancer();
 
             loadBalancer.AssignInteraction(new EmailInteraction("email1@email.com"), agents);
@@ -93,7 +93,5 @@ namespace CallPlanTests
             loadBalancer.AssignInteraction(new EmailInteraction("email10@email.com"), agents);
             loadBalancer.AssignInteraction(new EmailInteraction("email11@email.com"), agents);
         }
-
-
     }
 }

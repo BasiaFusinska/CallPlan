@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace CallPlan
 {
     public interface ILoadBalancer
     {
-        Agent AssignInteraction(IInteraction interaction, Queue<Agent> agents);
+        Agent AssignInteraction(IInteraction interaction, ConcurrentQueue<Agent> agents);
     }
 
 }
