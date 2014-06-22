@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CallPlan
 {
@@ -22,11 +23,11 @@ namespace CallPlan
         public CallPlan CreateCallPlan(dynamic inputData)
         {
             return new CallPlan(
-                new Func<dynamic, dynamic>[]
+                new Func<dynamic, Task<dynamic>>[]
                 {
-                    interaction => _serviceHandler.HandleService(((IInteraction) interaction).Originator).Result,
-                    response => _groupAssigner.AssignGroup((ServiceResponse)response, _groups),
-                    agentsGroup => ((AgentsGroup) agentsGroup).Assign((IInteraction) inputData)
+                    async interaction => await _serviceHandler.HandleService(((IInteraction) interaction).Originator),
+                    response => Task.Run(() => _groupAssigner.AssignGroup((ServiceResponse)response, _groups) as dynamic),
+                    agentsGroup => Task.Run(() => ((AgentsGroup) agentsGroup).Assign((IInteraction) inputData) as dynamic)
                 });
         }
     }

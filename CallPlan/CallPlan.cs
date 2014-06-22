@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CallPlan
 {
     public class CallPlan
     {
-        private readonly IList<Func<dynamic, dynamic>> _steps = new List<Func<dynamic, dynamic>>();
+        private readonly IList<Func<dynamic, Task<dynamic>>> _steps = new List<Func<dynamic, Task<dynamic>>>();
 
-        public CallPlan(IList<Func<dynamic, dynamic>> steps)
+        public CallPlan(IList<Func<dynamic, Task<dynamic>>> steps)
         {
             _steps = steps;
         }
@@ -17,16 +18,16 @@ namespace CallPlan
             _steps.Clear();
         }
 
-        public void AddStep(Func<dynamic, dynamic> step)
+        public void AddStep(Func<dynamic, Task<dynamic>> step)
         {
             _steps.Add(step);
         }
 
-        public dynamic Execute(dynamic inputData)
+        public async Task<dynamic> Execute(dynamic inputData)
         {
             foreach (var step in _steps)
             {
-                inputData = step(inputData);
+                inputData = await step(inputData);
             }
             return inputData;
         }

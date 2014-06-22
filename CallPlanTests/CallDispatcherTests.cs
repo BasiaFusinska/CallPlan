@@ -44,33 +44,39 @@ namespace CallPlanTests
 
 
             var callPlan = dispatcher.CreateCallPlan(callInteraction1);
-            var agent1 = callPlan.Execute(callInteraction1) as Agent;
+            var task1 = callPlan.Execute(callInteraction1);
 
             callPlan = dispatcher.CreateCallPlan(callInteraction2);
-            var agent2 = callPlan.Execute(callInteraction2) as Agent;
+            var task2 = callPlan.Execute(callInteraction2);
 
             callPlan = dispatcher.CreateCallPlan(callInteraction3);
-            var agent3 = callPlan.Execute(callInteraction3) as Agent;
+            var task3 = callPlan.Execute(callInteraction3);
 
             callPlan = dispatcher.CreateCallPlan(emailInteraction1);
-            var agent4 = callPlan.Execute(emailInteraction1) as Agent;
+            var task4 = callPlan.Execute(emailInteraction1);
 
             callPlan = dispatcher.CreateCallPlan(emailInteraction2);
-            var agent5 = callPlan.Execute(emailInteraction2) as Agent;
+            var task5 = callPlan.Execute(emailInteraction2);
 
             callPlan = dispatcher.CreateCallPlan(emailInteraction3);
-            var agent6 = callPlan.Execute(emailInteraction3) as Agent;
+            var task6 = callPlan.Execute(emailInteraction3);
 
+            var agent1 = task1.Result as Agent;
             agent1.Name.Should().Be("1B");
             agent1.Calls.First().Should().Be(callInteraction1);
+            var agent2 = task2.Result as Agent;
             agent2.Name.Should().Be("1A");
             agent2.Calls.First().Should().Be(callInteraction2);
+            var agent3 = task3.Result as Agent;
             agent3.Name.Should().Be("1C");
             agent3.Calls.First().Should().Be(callInteraction3);
+            var agent4 = task4.Result as Agent;
             agent4.Name.Should().Be("1B");
             agent4.Emails.First().Should().Be(emailInteraction1);
+            var agent5 = task5.Result as Agent;
             agent5.Name.Should().Be("1A");
             agent5.Emails.First().Should().Be(emailInteraction2);
+            var agent6 = task6.Result as Agent;
             agent6.Name.Should().Be("1C");
             agent6.Emails.First().Should().Be(emailInteraction3);
         }
