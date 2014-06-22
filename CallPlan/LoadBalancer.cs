@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace CallPlan
@@ -9,46 +8,35 @@ namespace CallPlan
     {
         public Agent AssignInteraction(IInteraction interaction, ConcurrentQueue<Agent> agents)
         {
+            Agent agent;
+            while (!agents.TryPeek(out agent)) { }
+
             var email = interaction as EmailInteraction;
             if (email != null)
             {
-                return AssignEmail(email, agents);
+                return AssignInteraction(email, agents, agent.Emails, bag => bag.Count >= 5);
             }
 
             var call = interaction as CallInteraction;
             if (call != null)
             {
-                return AssignCall(call, agents);
+                return AssignInteraction(call, agents, agent.Calls, bag => bag.Any());
             }
             return null;
         }
 
-        private static Agent AssignCall(CallInteraction call, ConcurrentQueue<Agent> agents)
+        private static Agent AssignInteraction<T>(T interaction, 
+                                                  ConcurrentQueue<Agent> agents, 
+                                                  ConcurrentBag<T> bag,
+                                                  Func<ConcurrentBag<T>, bool> predicate)
+            where T: IInteraction
         {
-            Agent agent;
-            while(!agents.TryPeek(out agent)) {}
-
-            if (agent.Calls.Any())
+            if (predicate(bag))
                 throw new InteractionsOverflowException();
 
-            agent.Calls.Add(call);
+            bag.Add(interaction);
 
-            while(!agents.TryDequeue(out agent)) {}
-            agents.Enqueue(agent);
-
-            return agent;
-        }
-
-        private static Agent AssignEmail(EmailInteraction email, ConcurrentQueue<Agent> agents)
-        {
             Agent agent;
-            while (!agents.TryPeek(out agent)) { }
-
-            if (agent.Emails.Count >= 5)
-                throw new InteractionsOverflowException();
-
-            agent.Emails.Add(email);
-
             while (!agents.TryDequeue(out agent)) { }
             agents.Enqueue(agent);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,14 +7,8 @@ namespace CallPlan
 {
     public class Agent
     {
-        private readonly IList<CallInteraction> _calls = new List<CallInteraction>();
-        private readonly IList<EmailInteraction> _emails = new List<EmailInteraction>();
-
-        private readonly IList<IInteraction> _interactions = new List<IInteraction>(); 
-        public void Assign(IInteraction interaction)
-        {
-            _interactions.Add(interaction);
-        }
+        private readonly ConcurrentBag<CallInteraction> _calls = new ConcurrentBag<CallInteraction>();
+        private readonly ConcurrentBag<EmailInteraction> _emails = new ConcurrentBag<EmailInteraction>();
 
         public Agent(string name)
         {
@@ -21,17 +16,12 @@ namespace CallPlan
         }
         public string Name { get; private set; }
 
-        public IList<IInteraction> Interactions
-        {
-            get { return _interactions; }
-        }
-
-        public IList<CallInteraction> Calls
+        public ConcurrentBag<CallInteraction> Calls
         {
             get { return _calls; }
         }
 
-        public IList<EmailInteraction> Emails
+        public ConcurrentBag<EmailInteraction> Emails
         {
             get { return _emails; }
         }
